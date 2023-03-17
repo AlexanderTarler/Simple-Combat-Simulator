@@ -25,6 +25,23 @@ export const getAllCombatants = async () => {
   return newArray.flat();
 };
 
+export const getMonsterByName = async (prompt: string) => {
+  let newArray: any = [];
+  try {
+    await axios
+      .get(`http://localhost:3000/combatants/${prompt}`)
+      .then((res) => {
+        const combatants = res.data;
+        newArray.push(combatants);
+        return { persons: combatants };
+      });
+  } catch (error) {
+    console.log(error);
+  }
+
+  return newArray.flat();
+};
+
 export const updateCombatant = async (combatant: Combatant) => {
   try {
     await axios.put(`http://localhost:3000/combatants/${combatant.name}`, {

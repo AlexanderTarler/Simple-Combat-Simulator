@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './styles/Arena.css';
 import { diceRoller } from './dice/dice-roller';
 import { getAllCombatants, getCombatantByName } from './fetcher';
@@ -29,6 +29,8 @@ export function Arena({ first, setFirst, second, setSecond }: any) {
   const [hitReport, setHitReport] = useState('');
   const [turn, setTurn] = useState(true);
   const [round, setRound] = useState(false);
+  const [response, setResponse] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const firstTemplate: Combatant = {
     name: first.name,
