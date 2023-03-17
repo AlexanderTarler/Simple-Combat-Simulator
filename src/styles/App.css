@@ -1,0 +1,12 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: space-between;
+  background-color: black;
+  color: white;
+}
+
+.App {
+  background-color: black;
+}

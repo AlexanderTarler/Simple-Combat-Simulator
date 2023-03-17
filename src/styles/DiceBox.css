@@ -1,0 +1,15 @@
+.dice-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 2px solid black;
+  border-radius: 2px;
+  background-color: white;
+  color: black;
+  margin-block: 20px;
+  font-size: x-large;
+  font-weight: bolder;
+  width: 100px;
+  height: 100px;
+}

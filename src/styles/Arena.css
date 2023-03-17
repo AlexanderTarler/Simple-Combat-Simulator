@@ -1,0 +1,37 @@
+.Arena {
+  display: flex;
+  justify-content: center;
+  border: 5px solid white;
+  height: 380px;
+  margin-top: 30px;
+  background-color: purple;
+  color: white;
+}
+
+.middle-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-inline: 100px;
+}
+
+.firstCombatant {
+  border: 3px solid white;
+  height: 327px;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+.secondCombatant {
+  border: 3px solid white;
+  height: 327px;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+.fight-button {
+  height: 50px;
+  width: 100px;
+  margin-bottom: 20px;
+}
