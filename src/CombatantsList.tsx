@@ -1,6 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-
-import { diceRoller } from './dice/dice-roller';
+import { useEffect, useState } from 'react';
 import { getCombatantByName, getAllCombatants } from './fetcher';
 import { Combatant } from './types';
 import './styles/CombatantList.css';
@@ -13,7 +11,7 @@ export function CombatantList({
 }: any) {
   const [choiceTarget, setChoiceTarget] = useState(true);
   const [combatantChoice, setCombatantChoice] = useState('');
-  const [select, setSelect] = useState('Select first combatant!');
+  const [select, setSelect] = useState('Select first fighter!');
 
   const getCombatantsAtStart = async () =>
     setCombatants(await getAllCombatants());
@@ -33,20 +31,20 @@ export function CombatantList({
     if (choiceTarget == true) {
       setFirst(await getCombatantByName(combatant));
       setChoiceTarget(!choiceTarget);
-      setSelect('Select second combatant!');
+      setSelect('Select second fighter!');
     } else {
       setSecond(await getCombatantByName(combatant));
       setChoiceTarget(!choiceTarget);
-      setSelect('Select first combatant!');
+      setSelect('Select first fighter!');
     }
   };
 
   return (
     <div className="Combatants">
-      <h2>Combatant list</h2>
+      <h2>Fighters</h2>
       <header className="combatants-header">
         {combatants.map((combatant: Combatant) => (
-          <div className="combatant">
+          <div className="combatant list-tooltip">
             <button
               className="listed-combatant"
               onClick={() => {
@@ -54,6 +52,16 @@ export function CombatantList({
               }}
             >
               {combatant.name}
+              <span className="list-tooltiptext">
+                <h5>Name: {combatant.name}</h5>
+                <h5>Healthpoints: {combatant.healthPoints}</h5>
+                <h5>Armor: {combatant.armor}</h5>
+                <h5>
+                  Dodge: ({combatant.dodge + 10}) {combatant.dodge} + 10
+                </h5>
+                <h5>Attack: {combatant.toHit}</h5>
+                <h5>Damage: {combatant.damage}</h5>
+              </span>
             </button>
           </div>
         ))}

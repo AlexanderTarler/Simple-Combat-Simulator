@@ -16,20 +16,6 @@
   margin-inline: 100px;
 }
 
-.firstCombatant {
-  border: 3px solid white;
-  height: 327px;
-  padding: 10px;
-  margin-top: 20px;
-}
-
-.secondCombatant {
-  border: 3px solid white;
-  height: 327px;
-  padding: 10px;
-  margin-top: 20px;
-}
-
 .fight-button {
   height: 50px;
   width: 100px;

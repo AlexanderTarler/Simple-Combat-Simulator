@@ -46,49 +46,76 @@ export function CharacterCreator({ setCombatants }: any) {
 
     switch (stat) {
       case 'incHealthPoints':
-        newHealthPoints = newHealthPoints + 1;
-        setPoints((count) => count - 1);
-
+        if (points > 0) {
+          newHealthPoints = newHealthPoints + 1;
+          setPoints((count) => count - 1);
+        }
         break;
       case 'redHealthPoints':
-        newHealthPoints = newHealthPoints - 1;
-        setPoints((count) => count + 1);
+        if (newHealthPoints < 11) {
+          newHealthPoints = 10;
+        } else {
+          newHealthPoints = newHealthPoints - 1;
+          setPoints((count) => count + 1);
+        }
         break;
       case 'incArmor':
-        newArmor = newArmor + 1;
-        setPoints((count) => count - 1);
-
+        if (points > 0) {
+          newArmor = newArmor + 1;
+          setPoints((count) => count - 1);
+        }
         break;
       case 'redArmor':
-        newArmor = newArmor - 1;
-        setPoints((count) => count + 1);
+        if (newArmor < 1) {
+          newArmor = 0;
+        } else {
+          newArmor = newArmor - 1;
+          setPoints((count) => count + 1);
+        }
+
         break;
       case 'incDodge':
-        newDodge = newDodge + 1;
-        setPoints((count) => count - 1);
-
+        if (points > 0) {
+          newDodge = newDodge + 1;
+          setPoints((count) => count - 1);
+        }
         break;
       case 'redDodge':
-        newDodge = newDodge - 1;
-        setPoints((count) => count + 1);
+        if (newDodge < 1) {
+          newDodge = 0;
+        } else {
+          newDodge = newDodge - 1;
+          setPoints((count) => count + 1);
+        }
         break;
       case 'incToHit':
-        newToHit = newToHit + 1;
-        setPoints((count) => count - 1);
-
+        if (points > 0) {
+          newToHit = newToHit + 1;
+          setPoints((count) => count - 1);
+        }
         break;
       case 'redToHit':
-        newToHit = newToHit - 1;
-        setPoints((count) => count + 1);
+        if (newToHit < 1) {
+          newToHit = 0;
+        } else {
+          newToHit = newToHit - 1;
+          setPoints((count) => count + 1);
+        }
         break;
       case 'incDamage':
-        newDamage = newDamage + 1;
-        setPoints((count) => count - 1);
-
+        if (points > 0) {
+          newDamage = newDamage + 1;
+          setPoints((count) => count - 1);
+        }
         break;
       case 'redDamage':
-        newDamage = newDamage - 1;
-        setPoints((count) => count + 1);
+        if (newDamage < 2) {
+          newDamage = 1;
+        } else {
+          newDamage = newDamage - 1;
+          setPoints((count) => count + 1);
+        }
+
         break;
       case '':
         break;
@@ -112,18 +139,18 @@ export function CharacterCreator({ setCombatants }: any) {
     setPoints(20);
     setCombatant({
       name: newName,
-      healthPoints: 0,
+      healthPoints: 10,
       armor: 0,
       dodge: 0,
       toHit: 0,
-      damage: 0,
+      damage: 1,
     });
   };
 
   return (
     <div className="Creator">
       <header className="Creator-header">
-        <h2>Create, update or delete your character</h2>
+        <h2>Create, update or delete your fighter</h2>
         <label>
           Name
           <input
@@ -141,7 +168,12 @@ export function CharacterCreator({ setCombatants }: any) {
 
         <div className="input-box">
           <label className="stat-field">
-            Healthpoints
+            <div className="tooltip">
+              Healthpoints
+              <span className="tooltiptext">
+                How much damage your character can take before falling
+              </span>
+            </div>
             <div>{combatant.healthPoints}</div>
             <button
               className="stat-button"
@@ -157,7 +189,12 @@ export function CharacterCreator({ setCombatants }: any) {
             </button>
           </label>
           <label className="stat-field">
-            Armor
+            <div className="tooltip">
+              Armor
+              <span className="tooltiptext">
+                How much damage is reduced when your character is hit
+              </span>
+            </div>
             <div>{combatant.armor}</div>
             <button
               className="stat-button"
@@ -173,7 +210,12 @@ export function CharacterCreator({ setCombatants }: any) {
             </button>
           </label>
           <label className="stat-field">
-            Dodge
+            <div className="tooltip">
+              Dodge
+              <span className="tooltiptext">
+                How hard it is to hit your character
+              </span>
+            </div>
             <div>{combatant.dodge}</div>
             <button
               className="stat-button"
@@ -189,7 +231,12 @@ export function CharacterCreator({ setCombatants }: any) {
             </button>
           </label>
           <label className="stat-field">
-            Attack
+            <div className="tooltip">
+              Attack
+              <span className="tooltiptext">
+                How good your character are at hitting their target
+              </span>
+            </div>
             <div>{combatant.toHit}</div>
             <button
               className="stat-button"
@@ -205,7 +252,12 @@ export function CharacterCreator({ setCombatants }: any) {
             </button>
           </label>
           <label className="stat-field">
-            Damage
+            <div className="tooltip">
+              Damage
+              <span className="tooltiptext">
+                How much damage your character deals
+              </span>
+            </div>
             <div>{combatant.damage}</div>
             <button
               className="stat-button"

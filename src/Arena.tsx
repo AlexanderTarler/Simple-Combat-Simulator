@@ -1,36 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './styles/Arena.css';
 import { diceRoller } from './dice/dice-roller';
-import { getMonsterByName } from './fetcher';
-import { attack, damage } from './combat system/combat';
-import CombatantList from './CombatantsList';
+
 import { CombatantCard } from './CombatantCard';
 
 import { Dice } from './DiceBox';
 import { CombatReporter } from './CombatReporter';
 import { Combatant } from './types';
 
-const combatantTemplate: Combatant = {
-  name: '',
-  healthPoints: 0,
-  toHit: 0,
-  dodge: 0,
-  damage: 0,
-  armor: 0,
-};
-
 export function Arena({ first, second }: any) {
-  const [firstHP, setFirstHP] = useState(0);
-  const [secondHP, setSecondHP] = useState(0);
+  const [firstHP, setFirstHP] = useState(Number(first.healthPoints));
+  const [secondHP, setSecondHP] = useState(Number(second.healthPoints));
   const [diceRoll, setDiceRoll] = useState(diceRoller(20));
-  const [diceReport, setDiceReport] = useState('');
+  const [diceReport, setDiceReport] = useState('FIGHT!');
   const [hitReport, setHitReport] = useState('');
   const [turn, setTurn] = useState(true);
   const [round, setRound] = useState(false);
 
   const firstTemplate: Combatant = {
     name: first.name,
-    healthPoints: firstHP,
+    healthPoints: Number(first.healthPoints),
+    tempHealthPoints: firstHP,
     toHit: Number(first.toHit),
     dodge: Number(first.dodge),
     damage: Number(first.damage),
@@ -39,7 +29,8 @@ export function Arena({ first, second }: any) {
 
   const secondTemplate: Combatant = {
     name: second.name,
-    healthPoints: secondHP,
+    healthPoints: Number(second.healthPoints),
+    tempHealthPoints: secondHP,
     toHit: Number(second.toHit),
     dodge: Number(second.dodge),
     damage: Number(second.damage),
@@ -102,22 +93,28 @@ export function Arena({ first, second }: any) {
   };
 
   const handleStartButtonClick = async () => {
+    setFirstHP(firstTemplate.healthPoints);
+    setSecondHP(secondTemplate.healthPoints);
     setRound(!round);
-    const monster = await getMonsterByName('goblin');
-    console.log(monster);
   };
 
   useEffect(() => {
     if (firstHP < 1 && firstTemplate.name.length > 0) {
-      setHitReport(`${secondTemplate.name} wins!`);
       setRound(false);
+      setTimeout(() => {
+        setDiceReport(`${secondTemplate.name} wins!`);
+        setHitReport('Play again?');
+      }, 4000);
     }
   }, [firstHP]);
 
   useEffect(() => {
     if (secondHP < 1 && secondTemplate.name.length > 0) {
-      setHitReport(`${firstTemplate.name} wins!`);
       setRound(false);
+      setTimeout(() => {
+        setDiceReport(`${firstTemplate.name} wins!`);
+        setHitReport('Play again?');
+      }, 4000);
     }
   }, [secondHP]);
 
@@ -146,13 +143,11 @@ export function Arena({ first, second }: any) {
       </div>
       <div className="middle-box">
         <Dice diceRoll={diceRoll} />
-        <button
-          className="fight-button"
-          onClick={() => handleStartButtonClick()}
-        >
-          FIGHT!
-        </button>
-        <CombatReporter diceReport={diceReport} hitReport={hitReport} />
+        <CombatReporter
+          startButton={handleStartButtonClick}
+          diceReport={diceReport}
+          hitReport={hitReport}
+        />
       </div>
       <div className="secondCombatant">
         <CombatantCard

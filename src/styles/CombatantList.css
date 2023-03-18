@@ -26,3 +26,32 @@
   margin: 10px;
   font-size: large;
 }
+
+.list-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.list-tooltip .list-tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: purple;
+  color: white;
+  border: 2px solid white;
+  text-align: center;
+  padding: 2px;
+  border-radius: 6px;
+  top: 100%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.list-tooltip:hover .list-tooltiptext {
+  visibility: visible;
+}
