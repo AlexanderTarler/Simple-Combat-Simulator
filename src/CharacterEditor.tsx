@@ -1,118 +1,123 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import { diceRoller } from './dice/dice-roller';
+import { useEffect, useState } from 'react';
+import { combatantTemplate } from './App';
 import {
-  combatantTemplate,
   deleteCombatant,
   getAllCombatants,
   postCombatant,
   updateCombatant,
 } from './fetcher';
-import { Combatant } from './types';
 import './styles/CharacterEditor.css';
 
 export function CharacterCreator({ setCombatants }: any) {
   const [newName, setNewName] = useState('');
   const [points, setPoints] = useState(20);
-  const [healthPoints, setHealthPoints] = useState(0);
-  const [toHit, setToHit] = useState(0);
-  const [dodge, setDodge] = useState(0);
-  const [damage, setDamage] = useState(0);
-  const [armor, setArmor] = useState(0);
   const [message, setMessage] = useState('');
-
-  const combatantCreator: Combatant = {
-    name: newName,
-    healthPoints: healthPoints,
-    armor: armor,
-    dodge: dodge,
-    toHit: toHit,
-    damage: damage,
-  };
-
-  const getCombatantsAtStart = async () =>
-    setCombatants(await getAllCombatants());
+  const [combatant, setCombatant] = useState(combatantTemplate);
 
   function handleChange(evt: any) {
-    setNewName(evt.target.value);
     setMessage(evt.target.value);
+    setNewName(evt.target.value);
   }
 
   const handleCreateButtonClick = async () => {
     setMessage('');
-    await postCombatant(combatantCreator);
+    await postCombatant(combatant);
     setCombatants(await getAllCombatants());
   };
 
   const handleUpdateButtonClick = async () => {
     setMessage('');
-    await updateCombatant(combatantCreator);
+    await updateCombatant(combatant);
     setCombatants(await getAllCombatants());
   };
 
   const handleDeleteButtonClick = async () => {
     setMessage('');
-    await deleteCombatant(combatantCreator.name);
+    await deleteCombatant(newName);
     setCombatants(await getAllCombatants());
   };
 
+  const changeStat = (stat: any) => {
+    let newHealthPoints = combatant.healthPoints;
+    let newArmor = combatant.armor;
+    let newDodge = combatant.dodge;
+    let newToHit = combatant.toHit;
+    let newDamage = combatant.damage;
+
+    switch (stat) {
+      case 'incHealthPoints':
+        newHealthPoints = newHealthPoints + 1;
+        setPoints((count) => count - 1);
+
+        break;
+      case 'redHealthPoints':
+        newHealthPoints = newHealthPoints - 1;
+        setPoints((count) => count + 1);
+        break;
+      case 'incArmor':
+        newArmor = newArmor + 1;
+        setPoints((count) => count - 1);
+
+        break;
+      case 'redArmor':
+        newArmor = newArmor - 1;
+        setPoints((count) => count + 1);
+        break;
+      case 'incDodge':
+        newDodge = newDodge + 1;
+        setPoints((count) => count - 1);
+
+        break;
+      case 'redDodge':
+        newDodge = newDodge - 1;
+        setPoints((count) => count + 1);
+        break;
+      case 'incToHit':
+        newToHit = newToHit + 1;
+        setPoints((count) => count - 1);
+
+        break;
+      case 'redToHit':
+        newToHit = newToHit - 1;
+        setPoints((count) => count + 1);
+        break;
+      case 'incDamage':
+        newDamage = newDamage + 1;
+        setPoints((count) => count - 1);
+
+        break;
+      case 'redDamage':
+        newDamage = newDamage - 1;
+        setPoints((count) => count + 1);
+        break;
+      case '':
+        break;
+    }
+
+    setCombatant({
+      name: newName,
+      healthPoints: newHealthPoints,
+      armor: newArmor,
+      dodge: newDodge,
+      toHit: newToHit,
+      damage: newDamage,
+    });
+  };
+
   useEffect(() => {
-    getCombatantsAtStart();
+    changeStat('');
   }, []);
-
-  const increaseHP = () => {
-    setHealthPoints((count) => count + 1);
-    setPoints((count) => count - 1);
-  };
-
-  const decreaseHP = () => {
-    setHealthPoints((count) => count - 1);
-    setPoints((count) => count + 1);
-  };
-  const increaseArmor = () => {
-    setArmor((count) => count + 1);
-    setPoints((count) => count - 1);
-  };
-
-  const decreaseArmor = () => {
-    setArmor((count) => count - 1);
-    setPoints((count) => count + 1);
-  };
-  const increaseDodge = () => {
-    setDodge((count) => count + 1);
-    setPoints((count) => count - 1);
-  };
-
-  const decreaseDodge = () => {
-    setDodge((count) => count - 1);
-    setPoints((count) => count + 1);
-  };
-  const increaseToHit = () => {
-    setToHit((count) => count + 1);
-    setPoints((count) => count - 1);
-  };
-
-  const decreaseToHit = () => {
-    setToHit((count) => count - 1);
-    setPoints((count) => count + 1);
-  };
-  const increaseDamage = () => {
-    setDamage((count) => count + 1);
-    setPoints((count) => count - 1);
-  };
-
-  const decreaseDamage = () => {
-    setDamage((count) => count - 1);
-    setPoints((count) => count + 1);
-  };
 
   const reset = () => {
     setPoints(20);
-    setHealthPoints(0);
-    setArmor(0);
-    setDodge(0);
-    setToHit(0);
-    setDamage(0);
+    setCombatant({
+      name: newName,
+      healthPoints: 0,
+      armor: 0,
+      dodge: 0,
+      toHit: 0,
+      damage: 0,
+    });
   };
 
   return (
@@ -137,51 +142,81 @@ export function CharacterCreator({ setCombatants }: any) {
         <div className="input-box">
           <label className="stat-field">
             Healthpoints
-            <div>{combatantCreator.healthPoints}</div>
-            <button className="stat-button" onClick={increaseHP}>
+            <div>{combatant.healthPoints}</div>
+            <button
+              className="stat-button"
+              onClick={() => changeStat('incHealthPoints')}
+            >
               +
             </button>
-            <button className="stat-button" onClick={decreaseHP}>
+            <button
+              className="stat-button"
+              onClick={() => changeStat('redHealthPoints')}
+            >
               -
             </button>
           </label>
           <label className="stat-field">
             Armor
-            <div>{combatantCreator.armor}</div>
-            <button className="stat-button" onClick={increaseArmor}>
+            <div>{combatant.armor}</div>
+            <button
+              className="stat-button"
+              onClick={() => changeStat('incArmor')}
+            >
               +
             </button>
-            <button className="stat-button" onClick={decreaseArmor}>
+            <button
+              className="stat-button"
+              onClick={() => changeStat('redArmor')}
+            >
               -
             </button>
           </label>
           <label className="stat-field">
             Dodge
-            <div>{combatantCreator.dodge}</div>
-            <button className="stat-button" onClick={increaseDodge}>
+            <div>{combatant.dodge}</div>
+            <button
+              className="stat-button"
+              onClick={() => changeStat('incDodge')}
+            >
               +
             </button>
-            <button className="stat-button" onClick={decreaseDodge}>
+            <button
+              className="stat-button"
+              onClick={() => changeStat('redDodge')}
+            >
               -
             </button>
           </label>
           <label className="stat-field">
             Attack
-            <div>{combatantCreator.toHit}</div>
-            <button className="stat-button" onClick={increaseToHit}>
+            <div>{combatant.toHit}</div>
+            <button
+              className="stat-button"
+              onClick={() => changeStat('incToHit')}
+            >
               +
             </button>
-            <button className="stat-button" onClick={decreaseToHit}>
+            <button
+              className="stat-button"
+              onClick={() => changeStat('redToHit')}
+            >
               -
             </button>
           </label>
           <label className="stat-field">
             Damage
-            <div>{combatantCreator.damage}</div>
-            <button className="stat-button" onClick={increaseDamage}>
+            <div>{combatant.damage}</div>
+            <button
+              className="stat-button"
+              onClick={() => changeStat('incDamage')}
+            >
               +
             </button>
-            <button className="stat-button" onClick={decreaseDamage}>
+            <button
+              className="stat-button"
+              onClick={() => changeStat('redDamage')}
+            >
               -
             </button>
           </label>

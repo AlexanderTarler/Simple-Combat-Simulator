@@ -1,12 +1,18 @@
-import React, { useEffect, useState, useContext } from 'react';
-import logo from './logo.svg';
-import { diceRoller } from './dice/dice-roller';
-import { getAllCombatants, combatantTemplate } from './fetcher';
-import { Combatant } from './types';
+import { useState } from 'react';
 import Arena from './Arena';
 import { CharacterCreator } from './CharacterEditor';
 import './styles/App.css';
 import CombatantList from './CombatantsList';
+import { Combatant } from './types';
+
+export const combatantTemplate: Combatant = {
+  name: '',
+  healthPoints: 10,
+  toHit: 0,
+  dodge: 0,
+  damage: 1,
+  armor: 0,
+};
 
 function App() {
   const [firstCombatant, setFirstCombatant] = useState(combatantTemplate);
@@ -26,9 +32,7 @@ function App() {
       </div>
       <Arena
         first={firstCombatant}
-        setFirst={setFirstCombatant}
         second={secondCombatant}
-        setSecond={setSecondCombatant}
         setCombatants={setCombatants}
       />
     </div>

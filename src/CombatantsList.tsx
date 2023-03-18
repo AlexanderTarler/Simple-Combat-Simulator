@@ -1,19 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { diceRoller } from './dice/dice-roller';
-import {
-  combatantTemplate,
-  getCombatantByName,
-  getAllCombatants,
-  deleteCombatant,
-} from './fetcher';
+import { getCombatantByName, getAllCombatants } from './fetcher';
 import { Combatant } from './types';
 import './styles/CombatantList.css';
 
-export function CombatantList({ setFirst, setSecond, combatants }: any) {
+export function CombatantList({
+  setFirst,
+  setSecond,
+  combatants,
+  setCombatants,
+}: any) {
   const [choiceTarget, setChoiceTarget] = useState(true);
   const [combatantChoice, setCombatantChoice] = useState('');
   const [select, setSelect] = useState('Select first combatant!');
+
+  const getCombatantsAtStart = async () =>
+    setCombatants(await getAllCombatants());
+
+  useEffect(() => {
+    getCombatantsAtStart();
+  }, []);
 
   useEffect(() => {
     selectCombatant(combatantChoice);
@@ -24,7 +31,6 @@ export function CombatantList({ setFirst, setSecond, combatants }: any) {
       return;
     }
     if (choiceTarget == true) {
-      // setSelect('Select first combatant!');
       setFirst(await getCombatantByName(combatant));
       setChoiceTarget(!choiceTarget);
       setSelect('Select second combatant!');

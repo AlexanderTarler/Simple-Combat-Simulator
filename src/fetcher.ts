@@ -1,15 +1,6 @@
 import axios from 'axios';
 import { Combatant } from './types';
 
-export const combatantTemplate: Combatant = {
-  name: '',
-  healthPoints: 0,
-  toHit: 0,
-  dodge: 0,
-  damage: 0,
-  armor: 0,
-};
-
 export const getAllCombatants = async () => {
   let newArray: any = [];
   try {
@@ -29,11 +20,11 @@ export const getMonsterByName = async (prompt: string) => {
   let newArray: any = [];
   try {
     await axios
-      .get(`http://localhost:3000/combatants/${prompt}`)
+      .get(`https://www.dnd5eapi.co/api/monsters/${prompt}`)
       .then((res) => {
-        const combatants = res.data;
-        newArray.push(combatants);
-        return { persons: combatants };
+        const monster = res.data;
+        newArray.push(monster);
+        return { persons: monster };
       });
   } catch (error) {
     console.log(error);

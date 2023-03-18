@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './styles/Arena.css';
 import { diceRoller } from './dice/dice-roller';
-import { getAllCombatants, getCombatantByName } from './fetcher';
+import { getMonsterByName } from './fetcher';
 import { attack, damage } from './combat system/combat';
 import CombatantList from './CombatantsList';
-import { FirstCombatant } from './FirstCombatant';
-import { SecondCombatant } from './SecondCombatant';
+import { CombatantCard } from './CombatantCard';
+
 import { Dice } from './DiceBox';
 import { CombatReporter } from './CombatReporter';
 import { Combatant } from './types';
@@ -19,18 +19,14 @@ const combatantTemplate: Combatant = {
   armor: 0,
 };
 
-export function Arena({ first, setFirst, second, setSecond }: any) {
+export function Arena({ first, second }: any) {
   const [firstHP, setFirstHP] = useState(0);
   const [secondHP, setSecondHP] = useState(0);
-  const [firstCombatantToGet, setFirstCombatantToGet] = useState('');
-  const [secondCombatantToGet, setSecondCombatantToGet] = useState('');
   const [diceRoll, setDiceRoll] = useState(diceRoller(20));
   const [diceReport, setDiceReport] = useState('');
   const [hitReport, setHitReport] = useState('');
   const [turn, setTurn] = useState(true);
   const [round, setRound] = useState(false);
-  const [response, setResponse] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const firstTemplate: Combatant = {
     name: first.name,
@@ -57,14 +53,6 @@ export function Arena({ first, setFirst, second, setSecond }: any) {
   useEffect(() => {
     setSecondHP(second.healthPoints);
   }, [second]);
-
-  function handleFirstChange(evt: any) {
-    setFirstCombatantToGet(evt.target.value);
-  }
-
-  function handleSecondChange(evt: any) {
-    setSecondCombatantToGet(evt.target.value);
-  }
 
   const handleFirstAttackClick = async () => {
     const rollResult = diceRoller(20);
@@ -113,8 +101,10 @@ export function Arena({ first, setFirst, second, setSecond }: any) {
     }
   };
 
-  const handleStartButtonClick = () => {
+  const handleStartButtonClick = async () => {
     setRound(!round);
+    const monster = await getMonsterByName('goblin');
+    console.log(monster);
   };
 
   useEffect(() => {
@@ -149,8 +139,8 @@ export function Arena({ first, setFirst, second, setSecond }: any) {
   return (
     <div className="Arena">
       <div className="firstCombatant">
-        <FirstCombatant
-          firstCombatant={firstTemplate}
+        <CombatantCard
+          combatant={firstTemplate}
           handleAttack={handleFirstAttackClick}
         />
       </div>
@@ -165,8 +155,8 @@ export function Arena({ first, setFirst, second, setSecond }: any) {
         <CombatReporter diceReport={diceReport} hitReport={hitReport} />
       </div>
       <div className="secondCombatant">
-        <SecondCombatant
-          secondCombatant={secondTemplate}
+        <CombatantCard
+          combatant={secondTemplate}
           handleAttack={handleSecondAttackClick}
         />
       </div>
